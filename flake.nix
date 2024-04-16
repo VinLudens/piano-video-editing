@@ -24,6 +24,8 @@
           ffmpeg
           optipng
           libnotify
+          getoptions
+          coreutils
         ];
 
         buildInputs = [pkgs.makeWrapper];

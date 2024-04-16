@@ -1,12 +1,23 @@
 #!/bin/bash
 
+parser_definition() {
+    setup REST help:usage -- "Usage: maketitle ..." ''
+    msg -- "Options:"
+    param TITLE -t --title -- "Title of the video"
+    param COMPOSER -c --composer -- "Name of the composer (i.e. 'by XYZ')"
+    option ARTIST -a --artist on:"Piano by VinLudens" -- "Name of the artist (i.e. 'by XYZ')"
+    disp :usage -h --help
+}
+
+eval "$(getoptions parser_definition) exit 1"
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #                                    Inputs
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-TITLE="${1:-MUSIC TITLE}"
-COMPOSER="${2:-by COMPOSER}"
-ARTIST="${3:-Piano by VinLudens}"
+TITLE="${TITLE:-MUSIC TITLE}"
+COMPOSER="${COMPOSER:-by COMPOSER}"
+ARTIST="${ARTIST:-Piano by VinLudens}"
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #                                   Settings
