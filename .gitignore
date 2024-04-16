@@ -1,0 +1,6 @@
+# Ignore everything
+/*
+# # White-list tracked elements
+!.envrc
+!.gitignore
+!scripts/

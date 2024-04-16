@@ -1,0 +1,108 @@
+#!/bin/bash
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#                                    Inputs
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+TITLE="${1:-MUSIC TITLE}"
+COMPOSER="${2:-by COMPOSER}"
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#                                   Settings
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# list fonts with
+#   identify -list font
+FONTR="C059-Roman"
+FONTI="C059-Italic"
+
+IMAGE_SIZE="1920x1080"
+
+TITLE_SIZE=93
+COMPOSER_SIZE=53
+
+TITLE_OUT="title.png"
+COMPOSER_OUT="composer.png"
+
+SEQ_DIR="intro"
+FPS=25
+
+THUMBNAIL_DIR="../thumbnail"
+THUMBNAIL_SIZE=140
+TITLE_THUMBNAIL="$THUMBNAIL_DIR/$TITLE_OUT"
+TITLE_THUMBNAIL_INVERTED="$THUMBNAIL_DIR/${TITLE_OUT%%.*}-inverted.png"
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#                                Generate images
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+convert -verbose -size "$IMAGE_SIZE" \
+    xc:transparent \
+    -font "$FONTR" -pointsize "$TITLE_SIZE" \
+    -gravity center \
+    -draw "text 0,0 '$TITLE'" \
+    "$TITLE_OUT"
+
+convert -verbose -size "$IMAGE_SIZE" \
+    xc:transparent \
+    -font "$FONTI" -pointsize "$COMPOSER_SIZE" \
+    -gravity center \
+    -draw "text 0,113 '$COMPOSER'" \
+    "$COMPOSER_OUT"
+
+# Make thumbnail title template -------------------------------------------------
+if [ -d "$THUMBNAIL_DIR" ]
+then
+    convert -verbose -size "$IMAGE_SIZE" \
+        xc:transparent \
+        -font "$FONTR" -pointsize "$THUMBNAIL_SIZE" \
+        -gravity center \
+        -draw "text 0,0 '$TITLE'" \
+        "$TITLE_THUMBNAIL"
+    convert -verbose "$TITLE_THUMBNAIL" -channel RGB -negate "$TITLE_THUMBNAIL_INVERTED"
+fi
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#                       Generate animated image sequence
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# https://stackoverflow.com/questions/61076951/ffmpeg-join-crossfade-5-input-files-videoaudio-into-one-output-file
+
+mkdir -pv "$SEQ_DIR" || rm "$SEQ_DIR/*"
+
+ffmpeg \
+    -f lavfi -i color=c=white:s="$IMAGE_SIZE" \
+    -loop 1 -i "$TITLE_OUT" \
+    -loop 1 -i "$COMPOSER_OUT" \
+    -filter_complex "
+        [0]format=yuva420p,
+            fade=out:st=5:d=1:alpha=1,
+            setpts=PTS-STARTPTS[v0];
+        [1]format=yuva420p,
+            fade=in:st=0:d=0.66:alpha=1,
+            fade=out:st=4:d=1:alpha=1,
+            setpts=PTS-STARTPTS+(1/TB)[v1];
+        [2]format=yuva420p,
+            fade=in:st=0:d=0.66:alpha=1,
+            fade=out:st=2:d=1:alpha=1,
+            setpts=PTS-STARTPTS+(3/TB)[v2];
+        [v0][v1]overlay[out];
+        [out][v2]overlay[out]" \
+    -t 6 -r "$FPS" \
+    -map [out] "$SEQ_DIR/intro%03d.png"
+
+rm "$TITLE_OUT" "$COMPOSER_OUT"
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#                        Reduce image sequence file size
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# https://stackoverflow.com/a/27269509
+
+# mogrify -verbose -colorspace Gray -depth 8 -separate -average -quality 00 "$SEQ_DIR"/*.png
+ echo Optimizing PNG files ...
+ optipng -quiet -strip all "$SEQ_DIR"/*.png
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#                          Notify finished processing
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+notify-send "maketitle" "Finished producing title sequence"
