@@ -48,6 +48,7 @@
           # olive-editor
           audacity
           # tenacity
+          feh
         ]
         ++ myscripts;
     };
