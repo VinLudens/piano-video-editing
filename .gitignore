@@ -3,4 +3,6 @@
 # # White-list tracked elements
 !.envrc
 !.gitignore
+!flake.nix
+!flake.lock
 !scripts/
