@@ -80,6 +80,7 @@
           shfmt
           blender
           # olive-editor
+          krita
           audacity
           # tenacity
           feh
