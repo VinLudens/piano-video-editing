@@ -61,8 +61,7 @@ convert -verbose -size "$IMAGE_SIZE" \
     "$ARTIST_OUT"
 
 # Make thumbnail title template -------------------------------------------------
-if [ -d "$THUMBNAIL_DIR" ]
-then
+if [ -d "$THUMBNAIL_DIR" ]; then
     convert -verbose -size "$IMAGE_SIZE" \
         xc:transparent \
         -font "$FONTR" -pointsize "$THUMBNAIL_SIZE" \
@@ -114,8 +113,8 @@ rm "$TITLE_OUT" "$COMPOSER_OUT" "$ARTIST_OUT"
 # https://stackoverflow.com/a/27269509
 
 # mogrify -verbose -colorspace Gray -depth 8 -separate -average -quality 00 "$SEQ_DIR"/*.png
- echo Optimizing PNG files ...
- optipng -quiet -strip all "$SEQ_DIR"/*.png
+echo Optimizing PNG files ...
+optipng -quiet -strip all "$SEQ_DIR"/*.png
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #                          Notify finished processing
