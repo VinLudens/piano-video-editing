@@ -12,6 +12,36 @@
     pkgs = nixpkgs.legacyPackages.${system};
     lib = nixpkgs.lib;
     system = "x86_64-linux";
+    myfonts = [
+      (pkgs.stdenv.mkDerivation rec {
+        pname = "gsfonts";
+        version = "20200910";
+
+        src = pkgs.fetchzip {
+          url = "${meta.homepage}/archive/${version}/${pname}-${version}.zip";
+          sha512 = "sha512-pK8jLhi68WjyV89rbPhyjHbsliehOsLQBncSvaR39lzW4MjHTN1IR1YGNvOvhcfmLuroRhtq7J6nqzu6+X+rhQ==";
+          stripRoot = true;
+        };
+
+        installPhase = ''
+          install -vDm 644 fonts/* -t "$out/share/fonts"
+          install -vDm 644 appstream/*.xml -t "$out/share/metainfo"
+          install -vdm 755 "$out/share/fontconfig/conf.default/"
+          for _config in fontconfig/*.conf; do
+            _config_path="$out/share/fontconfig/conf.avail/69-''${_config##*/}"
+            install -vDm 644 "$_config" "$_config_path"
+            ln -srt "$out/share/fontconfig/conf.default/" "$_config_path"
+          done
+        '';
+
+        meta = with lib; {
+          description = "(URW)++ base 35 font set";
+          homepage = "https://github.com/ArtifexSoftware/urw-base35-fonts";
+          license = licenses.agpl3Only;
+          platforms = platforms.all;
+        };
+      })
+    ];
     myscripts = [
       (pkgs.stdenv.mkDerivation rec {
         pname = "maketitle";
@@ -19,14 +49,16 @@
 
         src = ./scripts;
 
-        runtimeDependencies = with pkgs; [
-          imagemagick
-          ffmpeg
-          optipng
-          libnotify
-          getoptions
-          coreutils
-        ];
+        runtimeDependencies = with pkgs;
+          [
+            imagemagick
+            ffmpeg
+            optipng
+            libnotify
+            getoptions
+            coreutils
+          ]
+          ++ myfonts;
 
         buildInputs = [pkgs.makeWrapper];
         installPhase = ''
@@ -52,7 +84,8 @@
           # tenacity
           feh
         ]
-        ++ myscripts;
+        ++ myscripts
+        ++ myfonts;
     };
   };
 }
