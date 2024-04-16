@@ -43,6 +43,7 @@
     devShells.${system}.default = pkgs.mkShell {
       packages = with pkgs;
         [
+          shfmt
           blender
           # olive-editor
           audacity
