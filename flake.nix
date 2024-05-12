@@ -84,6 +84,7 @@
       packages =
         (with pkgs; [
           shfmt
+          ltex-ls
           blender
           # olive-editor
           cinelerra
