@@ -85,6 +85,9 @@
         (with pkgs; [
           shfmt
           ltex-ls
+          nodePackages.pyright
+          python311Packages.python-lsp-server
+
           blender
           # olive-editor
           # cinelerra
@@ -92,6 +95,7 @@
           inkscape
           audacity
           # tenacity
+
           feh
           asciidoctor
         ])
