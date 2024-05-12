@@ -9,7 +9,13 @@
     self,
     nixpkgs,
   }: let
-    pkgs = nixpkgs.legacyPackages.${system};
+    pkgs = import nixpkgs {
+      system = system;
+      config.allowUnfreePredicate = pkg:
+        builtins.elem (lib.getName pkg) [
+          "faac" # cinelerra
+        ];
+    };
     lib = nixpkgs.lib;
     system = "x86_64-linux";
     myfonts = [
