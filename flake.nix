@@ -89,6 +89,7 @@
           # olive-editor
           # cinelerra
           krita
+          inkscape
           audacity
           # tenacity
           feh
