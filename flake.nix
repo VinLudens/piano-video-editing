@@ -11,10 +11,10 @@
   }: let
     pkgs = import nixpkgs {
       system = system;
-      config.allowUnfreePredicate = pkg:
-        builtins.elem (lib.getName pkg) [
-          "faac" # cinelerra
-        ];
+      # config.allowUnfreePredicate = pkg:
+      #   builtins.elem (lib.getName pkg) [
+      #     "faac" # cinelerra
+      #   ];
     };
     lib = nixpkgs.lib;
     system = "x86_64-linux";
@@ -87,7 +87,7 @@
           ltex-ls
           blender
           # olive-editor
-          cinelerra
+          # cinelerra
           krita
           audacity
           # tenacity
