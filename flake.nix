@@ -49,15 +49,15 @@
 
         src = ./scripts;
 
-        runtimeDependencies = with pkgs;
-          [
+        runtimeDependencies =
+          (with pkgs; [
             imagemagick
             ffmpeg
             optipng
             libnotify
             getoptions
             coreutils
-          ]
+          ])
           ++ myfonts;
 
         buildInputs = [pkgs.makeWrapper];
@@ -75,16 +75,18 @@
     ];
   in {
     devShells.${system}.default = pkgs.mkShell {
-      packages = with pkgs;
-        [
+      packages =
+        (with pkgs; [
           shfmt
           blender
           # olive-editor
+          cinelerra
           krita
           audacity
           # tenacity
           feh
-        ]
+          asciidoctor
+        ])
         ++ myscripts
         ++ myfonts;
     };
