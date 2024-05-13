@@ -195,7 +195,9 @@ logger.debug('Made all images transprent')
 #                                   Save images
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-os.makedirs(ARG_OUTPUT_DIRECTORY)
+if not os.path.isdir(ARG_OUTPUT_DIRECTORY):
+    logger.debug(f"Output directory does not exist. Creating {ARG_OUTPUT_DIRECTORY} ...")
+    os.makedirs(ARG_OUTPUT_DIRECTORY)
 
 background_outfile = f'{ARG_OUTPUT_DIRECTORY}/background.png'
 background_image.save(background_outfile)
