@@ -50,6 +50,18 @@ arg_parser.add_argument(
     type=str,
     default='png',
 )
+arg_parser.add_argument(
+    '--padding-x',
+    help='How much extra border to add on the X axis',
+    type=int,
+    default=100,
+)
+arg_parser.add_argument(
+    '--padding-y',
+    help='How much extra border to add on the Y axis',
+    type=int,
+    default=100,
+)
 
 args = arg_parser.parse_args()
 
@@ -58,6 +70,8 @@ ARG_OUTPUT_DIRECTORY: str = args.output_directory
 ARG_BACKGROUND: str = args.background
 ARG_RADIUS: float = args.radius
 ARG_EXTENSION: str = args.extension
+ARG_PADDING_X: int = args.padding_x
+ARG_PADDING_Y: int = args.padding_y
 
 logger = logging.getLogger()
 coloredlogs.install(
@@ -135,7 +149,7 @@ for box in input_image_boxes.values():
         largest_width = w
     if h > largest_height:
         largest_height = h
-bbox = (largest_width, largest_height)
+bbox = (largest_width + ARG_PADDING_X, largest_height + ARG_PADDING_Y)
 logger.debug(f'Largest bounding box: {bbox}')
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
