@@ -78,6 +78,31 @@
           description = "Create a title screen for my piano videos";
         };
       })
+      (pkgs.stdenvNoCC.mkDerivation rec {
+        pname = "make_transparent_score.py";
+        version = "1.0.0";
+
+        src = ./scripts/${pname};
+        unpackPhase = ":";
+
+        buildInputs = [pkgs.makeWrapper];
+        installPhase = ''
+          install -Dm755 ${src} $out/bin/${pname}
+        '';
+        postFixup = ''
+          wrapProgram $out/bin/${pname} --set PATH ${lib.makeBinPath [
+            (pkgs.python3.withPackages (python-pkgs: [
+              python-pkgs.coloredlogs
+              python-pkgs.numpy
+              python-pkgs.pillow
+            ]))
+          ]}
+        '';
+
+        meta = {
+          description = "Create suitable video overlay for individual music systems";
+        };
+      })
     ];
   in {
     devShells.${system}.default = pkgs.mkShell {
