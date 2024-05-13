@@ -181,6 +181,8 @@ logger.debug('Made all images transprent')
 #                                   Save images
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+os.makedirs(ARG_OUTPUT_DIRECTORY)
+
 background_outfile = f'{ARG_OUTPUT_DIRECTORY}/background.png'
 background_image.save(background_outfile)
 logger.info(f'Writing file: {background_outfile}')
