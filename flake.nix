@@ -118,6 +118,7 @@
           # cinelerra
           krita
           inkscape
+          imagemagick
           audacity
           # tenacity
 
