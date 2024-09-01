@@ -5,7 +5,7 @@ parser_definition() {
     msg -- "Options:"
     param TITLE -t --title -- "Title of the video"
     param COMPOSER -c --composer -- "Name of the composer (i.e. 'by XYZ')"
-    option ARTIST -a --artist on:"Piano by VinLudens" -- "Name of the artist (i.e. 'by XYZ')"
+    param ARTIST -a --artist init:="Piano by VinLudens" -- "Name of the artist (i.e. 'by XYZ')"
     param FPS -f --fps init:=25 -- "Framerate of the title screen"
     disp :usage -h --help
 }
