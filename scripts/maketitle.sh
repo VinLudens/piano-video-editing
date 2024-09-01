@@ -6,6 +6,7 @@ parser_definition() {
     param TITLE -t --title -- "Title of the video"
     param COMPOSER -c --composer -- "Name of the composer (i.e. 'by XYZ')"
     option ARTIST -a --artist on:"Piano by VinLudens" -- "Name of the artist (i.e. 'by XYZ')"
+    param FPS -f --fps init:=25 -- "Framerate of the title screen"
     disp :usage -h --help
 }
 
@@ -39,7 +40,7 @@ COMPOSER_OUT="composer.png"
 ARTIST_OUT="artist.png"
 
 SEQ_DIR="intro"
-FPS=25
+FPS=${FPS:-25}
 
 THUMBNAIL_DIR="../thumbnail"
 THUMBNAIL_SIZE=140
