@@ -110,8 +110,7 @@
         (with pkgs; [
           shfmt
           ltex-ls
-          nodePackages.pyright
-          python311Packages.python-lsp-server
+          basedpyright
 
           blender
           # olive-editor
