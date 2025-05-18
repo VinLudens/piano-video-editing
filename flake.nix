@@ -109,6 +109,7 @@
       packages =
         (with pkgs; [
           shfmt
+          shellcheck
           ltex-ls
           basedpyright
 
