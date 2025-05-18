@@ -126,7 +126,7 @@ rm "$TITLE_OUT" "$COMPOSER_OUT" "$ARTIST_OUT"
 
 # mogrify -verbose -colorspace Gray -depth 8 -separate -average -quality 00 "$SEQ_DIR"/*.png
 echo Optimizing PNG files ...
-optipng -quiet -strip all "$SEQ_DIR"/*.png
+parallel 'optipng -quiet -strip all {}' ::: "$SEQ_DIR"/*.png
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #                          Notify finished processing

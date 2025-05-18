@@ -63,6 +63,7 @@
             libnotify
             getoptions
             coreutils
+            parallel
           ])
           ++ myfonts;
 
