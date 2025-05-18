@@ -51,21 +51,21 @@ TITLE_THUMBNAIL_INVERTED="$THUMBNAIL_DIR/${TITLE_OUT%%.*}-inverted.png"
 #                                Generate images
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-convert -verbose -size "$IMAGE_SIZE" \
+magick -verbose -size "$IMAGE_SIZE" \
     xc:transparent \
     -font "$FONTR" -pointsize "$TITLE_SIZE" \
     -gravity center \
     -draw "text 0,0 '$TITLE'" \
     "$TITLE_OUT"
 
-convert -verbose -size "$IMAGE_SIZE" \
+magick -verbose -size "$IMAGE_SIZE" \
     xc:transparent \
     -font "$FONTI" -pointsize "$COMPOSER_SIZE" \
     -gravity center \
     -draw "text 0,113 '$COMPOSER'" \
     "$COMPOSER_OUT"
 
-convert -verbose -size "$IMAGE_SIZE" \
+magick -verbose -size "$IMAGE_SIZE" \
     xc:transparent \
     -font "$FONTI" -pointsize "$ARTIST_SIZE" \
     -gravity center \
@@ -74,13 +74,13 @@ convert -verbose -size "$IMAGE_SIZE" \
 
 # Make thumbnail title template -------------------------------------------------
 if [ -d "$THUMBNAIL_DIR" ]; then
-    convert -verbose -size "$IMAGE_SIZE" \
+    magick -verbose -size "$IMAGE_SIZE" \
         xc:transparent \
         -font "$FONTR" -pointsize "$THUMBNAIL_SIZE" \
         -gravity center \
         -draw "text 0,0 '$TITLE'" \
         "$TITLE_THUMBNAIL"
-    convert -verbose "$TITLE_THUMBNAIL" -channel RGB -negate "$TITLE_THUMBNAIL_INVERTED"
+    magick -verbose "$TITLE_THUMBNAIL" -channel RGB -negate "$TITLE_THUMBNAIL_INVERTED"
 fi
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
