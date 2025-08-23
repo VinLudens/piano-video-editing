@@ -114,13 +114,13 @@
           ltex-ls
           basedpyright
 
-          blender
+          # blender
           # olive-editor
           # cinelerra
-          krita
-          inkscape
+          # krita
+          # inkscape
           imagemagick
-          audacity
+          # audacity
           # tenacity
 
           feh
