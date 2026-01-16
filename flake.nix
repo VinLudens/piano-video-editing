@@ -5,18 +5,15 @@
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-  }: let
+  outputs = {nixpkgs, ...}: let
     pkgs = import nixpkgs {
-      system = system;
+      inherit system;
       # config.allowUnfreePredicate = pkg:
       #   builtins.elem (lib.getName pkg) [
       #     "faac" # cinelerra
       #   ];
     };
-    lib = nixpkgs.lib;
+    inherit (nixpkgs) lib;
     system = "x86_64-linux";
     myfonts = [
       (pkgs.stdenv.mkDerivation rec {
