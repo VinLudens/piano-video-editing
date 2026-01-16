@@ -120,6 +120,8 @@
           # audacity
           # tenacity
 
+          python3Packages.mido
+
           feh
           asciidoctor
         ])
