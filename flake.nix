@@ -110,6 +110,7 @@
           shellcheck
           ltex-ls
           basedpyright
+          ruff
 
           # blender
           # olive-editor
